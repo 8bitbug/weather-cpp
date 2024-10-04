@@ -6,7 +6,7 @@
 #include <vector>
 
 auto ISOTime() -> std::string {
-  auto now = std::chrono::system_clock::now();
+  std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
   time_t now_time = std::chrono::system_clock::to_time_t(now);
 
   std::tm tm_utc = *std::gmtime(&now_time);
@@ -38,8 +38,7 @@ auto main(void) -> int {
   bool found = false;
   for (size_t i = 0; i < times.size(); i++) {
     if (times[i] == ISOTime()) {
-      std::cout << "Tempature at " << times[i] << ": " << temparatures[i]
-                << " C" << std::endl;
+      std::cout << "Tempature at " << temparatures[i] << " C" << std::endl;
       found = true;
       break;
     }
