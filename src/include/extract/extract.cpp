@@ -36,16 +36,16 @@ auto extract::word(const std::string &string, int index) -> std::string {
 auto extract::number(const std::string &string, int index) -> int {
   word_data numeric(index);
   for (const char &ch : string) {
-    if (ch != ' ' || !isalpha(ch)) {
+    if (ch != ' ' || !static_cast<bool>(isalpha(static_cast<unsigned char>(ch)))) {
       if (!numeric.inside) {
         numeric.inside = true;
         if (numeric.current == numeric.index) {
-          if (std::isdigit(ch) || (ch == '-' && numeric.result.empty())) {
+          if ((std::isdigit(ch) != 0) || (ch == '-' && numeric.result.empty())) {
             numeric.result.push_back(ch);
           }
         }
       } else if (numeric.current == numeric.index) {
-        if (std::isdigit(ch)) {
+        if (std::isdigit(ch) != 0) {
           numeric.result.push_back(ch);
         }
       }
@@ -67,7 +67,7 @@ auto extract::decimal(const std::string &string, int index) -> float {
   int current_decimal_index = 0;
 
   for (const char &ch : string) {
-    if (std::isdigit(ch)) {
+    if (static_cast<bool>(std::isdigit(static_cast<unsigned char>(ch)))) {
       if (!parsing_number) {
         parsing_number = true;
         decimal.result.clear();
@@ -88,5 +88,5 @@ auto extract::decimal(const std::string &string, int index) -> float {
     }
   }
 
-  return decimal.result.length() < 1 ? 0.0f : std::stof(decimal.result);
+  return decimal.result.length() < 1 ? 0.0F : std::stof(decimal.result);
 }

@@ -4,10 +4,10 @@
 #include <iostream>
 
 auto WriteCallBack(
-    void *contents,
-    size_t size,
-    size_t nmemb,
-    std::string *userp
+  void *contents,
+  size_t size,
+  size_t nmemb,
+  std::string *userp
 ) -> size_t {
   size_t totalSize = size * nmemb;
   userp->append(static_cast<char *>(contents), totalSize);
@@ -19,20 +19,20 @@ private:
   std::string m_url;
 
 public:
-  request_params(const char *url) : m_url(url), json() {}
+  request_params(const char *url) : m_url(url) {}
 
   CURL *curl;
   CURLcode res;
   std::string json;
 
-  auto getURL() const -> std::string { return m_url; }
+  [[nodiscard]] auto getURL() const -> std::string { return m_url; }
 };
 
 auto fetch::json(const char *url) -> nlohmann::json {
   request_params api(url);
 
   api.curl = curl_easy_init();
-  if (!api.curl) {
+  if (!static_cast<bool>(api.curl)) {
     std::cerr << "Failed to initialize CURL." << std::endl;
     throw std::runtime_error("CURL initialization failed");
   }
